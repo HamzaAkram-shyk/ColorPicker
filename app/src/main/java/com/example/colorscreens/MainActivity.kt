@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.colorscreens.ui.model.ItemColorEvent
 import com.example.colorscreens.ui.model.ItemColorViewModel
 import com.example.colorscreens.ui.model.ItemState
 import com.example.colorscreens.ui.theme.ColorScreensTheme
@@ -71,24 +72,6 @@ fun ColorSelectorItem(itemState: ItemState, onSelected: (ItemState) -> Unit) {
 fun DefaultPreview() {
     ColorScreensTheme {
         val viewModel = viewModel<ItemColorViewModel>()
-//        val state = viewModel.state.value
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            LazyRow(
-//                modifier = Modifier.fillMaxWidth(),
-//                contentPadding = PaddingValues(horizontal = 6.dp),
-//                horizontalArrangement = Arrangement.spacedBy(6.dp)
-//            ) {
-//                itemsIndexed(state.list) { index, rowItem ->
-//                    ColorSelectorItem(itemState = rowItem) { colorItem ->
-//                        viewModel.changeColor(colorItem, index)
-//                    }
-//                }
-//            }
-//        }
-
         MyApp(viewModel = viewModel)
 
     }
@@ -112,7 +95,7 @@ fun MyApp(viewModel: ItemColorViewModel) {
         ) {
             itemsIndexed(flowUiState.list) { index, rowItem ->
                 ColorSelectorItem(itemState = rowItem) { colorItem ->
-                    viewModel.changeColorState(colorItem, index)
+                    viewModel.onEventTrigger(ItemColorEvent.ChangeColor(colorItem, index))
                 }
             }
         }

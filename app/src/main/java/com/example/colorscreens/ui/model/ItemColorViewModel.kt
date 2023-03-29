@@ -1,9 +1,6 @@
 package com.example.colorscreens.ui.model
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
+
 import androidx.lifecycle.ViewModel
 import com.example.colorscreens.Utill
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +13,6 @@ data class ItemColorUiStat(
 
 
 class ItemColorViewModel : ViewModel() {
-    var _dataList = mutableStateListOf<ItemState>()
-    var dataList: List<ItemState> = _dataList
-
-    private val uiState = mutableStateOf(ItemColorUiStat())
-    val state: State<ItemColorUiStat> = uiState
-
     private val uiStateFlow = MutableStateFlow(ItemColorUiStat())
     val stateFlow = uiStateFlow.asStateFlow()
 
@@ -35,18 +26,18 @@ class ItemColorViewModel : ViewModel() {
         }
     }
 
-    fun changeColor(item: ItemState, position: Int) {
-        uiState.value = state.value.copy(
-            list = state.value.list.mapIndexed { index, iitem ->
-                if (position == index && item == iitem) item.copy(
-                    isSelected = !item.isSelected
-                ) else iitem.copy(isSelected = false)
-            },
-            selectedColor = if (item.isSelected) Utill.whiteColor else item.itemColor
-        )
-    }
+//    fun changeColor(item: ItemState, position: Int) {
+//        uiState.value = state.value.copy(
+//            list = state.value.list.mapIndexed { index, iitem ->
+//                if (position == index && item == iitem) item.copy(
+//                    isSelected = !item.isSelected
+//                ) else iitem.copy(isSelected = false)
+//            },
+//            selectedColor = if (item.isSelected) Utill.whiteColor else item.itemColor
+//        )
+//    }
 
-    fun changeColorState(item: ItemState, position: Int) {
+    private fun changeColorState(item: ItemState, position: Int) {
         uiStateFlow.update {
             it.copy(
                 list = it.list.mapIndexed { index, itemState ->
@@ -56,6 +47,18 @@ class ItemColorViewModel : ViewModel() {
                 },
                 selectedColor = if (item.isSelected) Utill.whiteColor else item.itemColor
             )
+        }
+    }
+
+
+    fun onEventTrigger(event: ItemColorEvent) {
+        when (event) {
+            is ItemColorEvent.ChangeColor -> {
+                changeColorState(event.itemState, event.itemPosition)
+            }
+            ItemColorEvent.GetColors -> {
+                getItems(20)
+            }
         }
     }
 
