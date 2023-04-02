@@ -1,6 +1,4 @@
 package com.example.colorscreens.ui.model
-
-
 import androidx.lifecycle.ViewModel
 import com.example.colorscreens.Utill
 import kotlinx.coroutines.flow.MutableStateFlow
